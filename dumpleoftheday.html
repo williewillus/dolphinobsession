@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8" />
+	<title>Dumple of the Day</title>
+	<link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+	<h1>Dumple of the Day</h1>
+	<p>
+	  This page displays a selected picture that rotates daily, powered by the
+	  <a href="https://github.com/vnelee/dumpleoftheday">DumpleOfTheDay API</a>.
+	</p>
+
+	<label for="dotd-date">Select Date (empty for today's picture):</label>
+	<button id="dotd-date-back">←</button>
+	<input type="date" id="dotd-date" min="2023-09-15" value="" />
+	<button id="dotd-date-forward">→</button>
+
+	<div id="dotd-slot">
+	</div>
+
+	<script>
+	  async function dotd_fetch(date) { // string
+		  const uri = 'https://dumpleapi.williewillus.net/imgoftheday' + (date ? '/' + date : '');
+		  const response = await fetch(uri, {
+			  mode: 'cors',
+		  });
+		  const imgData = await response.json();
+		  const element = document.getElementById("dotd-slot");
+		  const img = document.createElement('img');
+		  img.src = imgData[0].url;
+		  img.title = imgData[0].image_caption;
+		  // TODO, bucket needs cors: img.crossOrigin = "anonymous";
+		  
+		  const figure = document.createElement('figure');
+		  figure.appendChild(img);
+		  const figCaption = document.createElement('figcaption');
+		  figCaption.innerText = imgData[0].image_caption;
+		  figure.appendChild(figCaption);
+		  element.replaceChildren(figure);
+	  }
+
+	  async function init_datepicker() {
+		  const datepicker = document.getElementById("dotd-date");
+		  const now = new Date();
+		  // month +1 because months are 0-indexed
+		  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+		  const day = now.getDate().toString().padStart(2, '0');
+		  const ymd = `${now.getFullYear()}-${month}-${day}`; 
+		  datepicker.max = ymd;
+		  datepicker.value = ymd;
+
+		  // fetch today's image
+		  dotd_fetch(ymd);
+
+		  datepicker.addEventListener('change', async (e) => {
+			  await dotd_fetch(e.target.value);
+		  });
+		  document.getElementById("dotd-date-back").addEventListener('click', e => {
+			  const picker = document.getElementById("dotd-date");
+			  picker.stepDown();
+			  // ff doesn't seem to fire the change event on the datepicker so we have to refetch ourselves
+			  dotd_fetch(picker.value);
+		  });
+		  document.getElementById("dotd-date-forward").addEventListener('click', e => {
+			  const picker = document.getElementById("dotd-date");
+			  picker.stepUp();
+			  // ff doesn't seem to fire the change event on the datepicker so we have to refetch ourselves
+			  dotd_fetch(picker.value);
+		  });
+	  }
+
+	  init_datepicker();
+	</script>
+	
+	<footer>
+	  <ul>
+		<li><a href="/index.html">Home</a></li>
+		<li><a href="/dumpleoftheday.html">Dumple of the Day</a></li>
+	  </ul>
+	  &copy; 2024 All Rights Reserved.
+	</footer>
+  </body>  
+</html>
