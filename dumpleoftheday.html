@@ -46,6 +46,7 @@
 		  figCaption.innerText = imgData[0].image_caption;
 		  figure.appendChild(figCaption);
 		  element.replaceChildren(figure);
+		  window.location.hash = date;
 	  }
 
 	  async function init_datepicker() {
@@ -56,10 +57,15 @@
 		  const day = now.getDate().toString().padStart(2, '0');
 		  const ymd = `${now.getFullYear()}-${month}-${day}`; 
 		  datepicker.max = ymd;
-		  datepicker.value = ymd;
+		  const frag = window.location.hash.substring(1);
+		  if (/\d{4}-\d{2}-\d{2}/.test(frag)) {
+			  datepicker.value = frag; // todo better validation
+		  } else {
+			  datepicker.value = ymd;
+		  }
 
 		  // fetch today's image
-		  dotd_fetch(ymd);
+		  dotd_fetch(datepicker.value);
 
 		  datepicker.addEventListener('change', async (e) => {
 			  await dotd_fetch(e.target.value);
