@@ -2,3 +2,7 @@ body {
 	background-color: lightskyblue;
 	font-family: sans-serif;
 }
+
+p {
+	max-width: 65%;
+}
