@@ -5,6 +5,13 @@
 	<title>Dumple of the Day</title>
 	<link rel="stylesheet" href="/css/main.css" />
 	<link rel="icon" href="/img/logo.png" />
+	<style>
+	  img {
+		  object-fit: contain;
+		  height: 100%;
+		  width: 100%;
+	  }
+	</style>
   </head>
   <body>
 	<h1>Dumple of the Day</h1>
@@ -14,18 +21,20 @@
 	  </nav>
 	</header>
 
-	<p>
-	  This page displays a selected picture that rotates daily, powered by the
-	  <a href="https://github.com/vnelee/dumpleoftheday">DumpleOfTheDay API</a>.
-	</p>
+	<main>
+	  <p>
+		This page displays a selected picture that rotates daily, powered by the
+		<a href="https://github.com/vnelee/dumpleoftheday">DumpleOfTheDay API</a>.
+	  </p>
 
-	<label for="dotd-date">Select Date (empty for today's picture):</label>
-	<button id="dotd-date-back">←</button>
-	<input type="date" id="dotd-date" min="2023-09-15" value="" />
-	<button id="dotd-date-forward">→</button>
+	  <label for="dotd-date">Select Date (empty for today's picture):</label>
+	  <button id="dotd-date-back">←</button>
+	  <input type="date" id="dotd-date" min="2023-09-15" value="" />
+	  <button id="dotd-date-forward">→</button>
 
-	<div id="dotd-slot">
-	</div>
+	  <div id="dotd-slot">
+	  </div>
+	</main>
 
 	<script>
 	  async function dotd_fetch(date) { // string
