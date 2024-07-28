@@ -41,23 +41,28 @@
 
 	<script>
 	  async function dotd_fetch(date) { // string
+		  const element = document.getElementById("dotd-slot");
 		  const uri = 'https://dumpleapi.williewillus.net/imgoftheday' + (date ? '/' + date : '');
 		  const response = await fetch(uri, {
 			  mode: 'cors',
 		  });
-		  const imgData = await response.json();
-		  const element = document.getElementById("dotd-slot");
-		  const img = document.createElement('img');
-		  img.src = imgData[0].url;
-		  img.title = imgData[0].image_caption;
-		  // TODO, bucket needs cors: img.crossOrigin = "anonymous";
-		  
-		  const figure = document.createElement('figure');
-		  figure.appendChild(img);
-		  const figCaption = document.createElement('figcaption');
-		  figCaption.innerText = imgData[0].image_caption;
-		  figure.appendChild(figCaption);
-		  element.replaceChildren(figure);
+		  const imgDatas = await response.json();
+		  const imgData = imgDatas[0];
+		  if (imgData.url) {
+			  const img = document.createElement('img');
+			  img.src = imgData[0].url;
+			  img.title = imgData[0].image_caption;
+			  // TODO, bucket needs cors: img.crossOrigin = "anonymous";
+			  
+			  const figure = document.createElement('figure');
+			  figure.appendChild(img);
+			  const figCaption = document.createElement('figcaption');
+			  figCaption.innerText = imgData[0].image_caption;
+			  figure.appendChild(figCaption);
+			  element.replaceChildren(figure);
+		  } else {
+			  element.replaceChildren('Error fetching picture of the day');
+		  }
 		  window.location.hash = date;
 	  }
 
