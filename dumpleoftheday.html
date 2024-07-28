@@ -47,17 +47,17 @@
 			  mode: 'cors',
 		  });
 		  const imgDatas = await response.json();
-		  const imgData = imgDatas[0];
-		  if (imgData.url) {
+		  if (imgDatas && imgDatas[0].url) {
+			  const imgData = imgDatas[0];
 			  const img = document.createElement('img');
-			  img.src = imgData[0].url;
-			  img.title = imgData[0].image_caption;
+			  img.src = imgData.url;
+			  img.title = imgData.image_caption;
 			  // TODO, bucket needs cors: img.crossOrigin = "anonymous";
 			  
 			  const figure = document.createElement('figure');
 			  figure.appendChild(img);
 			  const figCaption = document.createElement('figcaption');
-			  figCaption.innerText = imgData[0].image_caption;
+			  figCaption.innerText = imgData.image_caption;
 			  figure.appendChild(figCaption);
 			  element.replaceChildren(figure);
 		  } else {
